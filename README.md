@@ -11,7 +11,7 @@
 
 # :book: Project Overview
 
-This project is an educational platform for hardware security demonstrations and challenges. The goal is to have a modular platform with several exercises, to train on FPGA boards. It is very easy to make new boards compatible with the project or to add new challenges.
+The aim of this project is to create an educational platform with a primary focus on constructing a generator for Systems-on-Chip (SoC) that is vulnerable, configurable, and user-friendly. It is tailored for individuals seeking to improve their proficiency in identifying or exploiting vulnerabilities within the field of hardware security. This platform can function as instructional material or be employed for Capture The Flag (CTF) challenges, offering users practical hands-on experience in a controlled setting. Additionally, the platform can be utilized to assess hardware description analysis tools that identify bugs and backdoors.
 
 # :rocket: Getting Started
 
