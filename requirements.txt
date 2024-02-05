@@ -1,0 +1,5 @@
+sphinx 
+sphinx-rtd-theme 
+ninja 
+meson==0.59 
+configparser
