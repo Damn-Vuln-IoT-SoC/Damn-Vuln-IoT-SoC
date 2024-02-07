@@ -23,7 +23,8 @@ The aim of this project is to create an educational platform with a primary focu
 ### Generate the documentation
 
 ```console
-$ cd damn-vuln-iot-soc
+$ git clone https://github.com/Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC.git
+$ cd Damn-Vuln-IoT-SoC
 $ pip3 install -r requirements.txt
 $ cd docs
 $ make html
