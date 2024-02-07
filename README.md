@@ -22,12 +22,12 @@ The aim of this project is to create an educational platform with a primary focu
 
 ### Generate the documentation
 
-```bash
-cd damn-vuln-iot-soc
-pip3 install -r requirements.txt
-cd docs
-make html
-cd _build/html
+```console
+$ cd damn-vuln-iot-soc
+$ pip3 install -r requirements.txt
+$ cd docs
+$ make html
+$ cd _build/html
 ```
 
 # Contributors
