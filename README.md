@@ -15,7 +15,7 @@ The aim of this project is to create an educational platform with a primary focu
 
 # :rocket: Getting Started
 
-> ⚠️ Before installation, we assume that your development tools for your FPGA board are already installed, for example, if you are using a Digilent Basys3 board you need to install Xilinx Vivado. 
+> ⚠️ Before installation, we assume that your development tools for your FPGA board are already installed, for example, if you are using a Digilent board you need to install Xilinx Vivado. 
 > These tools are not necessary if you plan to use only simulation.
 
 ## Build the documentation
