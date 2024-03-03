@@ -27,16 +27,16 @@ We create a virtual python environment to be more secure, and not to break exist
 
 .. code-block:: console
 
-    $ python3 -m venv LiteX
-    $ source LiteX/bin/activate
-    $ cd LiteX
+    $ python3 -m venv DVIS
+    $ source DVIS/bin/activate
+    $ cd DVIS
 
 Clone the project
 -----------------
 
 .. code-block:: console
 
-    $ git clone https://forgens.univ-ubs.fr/gitlab/adamhlt/damn-vuln-iot-soc.git
+    $ git clone https://github.com/Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC.git
 
 Install LiteX with the setup
 ----------------------------
@@ -47,7 +47,7 @@ Since we use the VexRiscV processor the standard LiteX configuration is sufficie
 .. code-block:: console
 
     $ pip3 install -r requirements.txt 
-    $ cd damn-vuln-iot-soc/Damn-Vuln-IoT-SoC
+    $ cd Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC
     $ chmod +x litex_setup.py
     $ ./litex_setup.py --init --install --config=standard --tag=2022.08
 
@@ -60,35 +60,39 @@ In order to compile the firmware for the VexRiscV it is necessary to install the
 
     $ ./litex_setup.py --gcc=riscv
 
-Install the setup for the simulation and test it
-------------------------------------------------
+Build OpenOCD for RiscV
+-----------------------
+
+If you want to use the JTAG interface and the GDB debugger you will need to build OpenOCD for RiscV.
 
 .. code-block:: console
 
-    $ sudo apt install libevent-dev libjson-c-dev verilator
-    $ litex_sim --cpu-type=vexriscv
+    $ sudo apt-get install libtool automake libusb-1.0.0-dev texinfo libusb-dev libyaml-dev pkg-config
+    $ git clone https://github.com/SpinalHDL/openocd_riscv.git
+    $ cd openocd_riscv/
+    $ ./bootstrap
+    $ ./configure --enable-ftdi --enable-dummy
+    $ make
+    $ make install
 
-Build the SoC for the challenges
---------------------------------
-
-.. note::
-
-    If you have already installed the tools to generate the bitstream for your FPGA board you can generate it with LiteX and load it on the card with the ``--load`` command.
+Build the Demo
+--------------
 
 Before generating an SoC it is necessary to choose which vulnerabilities you want to add to the SoC. For that I invite you to read the section of each vulnerability to know which ones to choose, some require additional hardware like a flash memory, a JTAG programmer... 
-Then you can edit the ``conf.ini`` file to fill in the vulnerabilities to add and their parameters if needed. Once all this is done you can use the following command in the folder ``Damn-Vuln-IoT-SoC/litex-boards/litex_boards/targets`` to generate the SoC :
+Then you can edit the ``config/config.ini`` file to fill in the vulnerabilities to add and their parameters if needed.
 
 .. code-block:: console
 
-    $ ./digilent_basys3_vul.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --bios-console=disable --build
-
-After you can add ``--load`` parameter to load the bitstream on the FPGA.
-
-.. code-block:: console
-
-    $ ./digilent_basys3_vul.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --bios-console=disable --load
-
-Now you can use the platform to generate vulnerable SoCs and train on them.
+   $ git clone https://github.com/Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC-Demo.git
+   $ pip3 install Damn-Vuln-IoT-SoC-Demo/
+   $ cd Damn-Vuln-IoT-SoC-Demo/Damn-Vuln-IoT-SoC-Demo
+   $ chmod +x build.py
+   $ ./build.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --no-compile-gateware --build
+   $ cd firmware
+   $ ./firmware.py --build-path=../build/board/ --mem=rom
+   $ cd ..
+   $ ./build.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-rom-init=firmware/firmware.bin --bios-console=disable --build --load
+   $ screen <device> 115200
 
 .. note::
 
@@ -98,36 +102,41 @@ Now you can use the platform to generate vulnerable SoCs and train on them.
 
     If you want to integrate challenges using SPI flash memory, it is necessary to perform additional steps.
 
-Build the firmware
-------------------
+Install Verilator for simulation
+--------------------------------
 
-.. note::
-
-    To load the firmware on the base please refer to the LiteX `documentation <https://github.com/enjoy-digital/litex/wiki/Load-Application-Code-To-CPU#serial-boot>`_ using ``litex_term``.
-
-The firmware is made to be modular and include only the code needed for your challenges. In order to generate the firmware, please generate the bitstream first and choose the challenges you want.
-To generate the firmware, please go to the ``Damn-Vuln-IoT-SoC/litex/litex/soc/software/firmware`` folder and run the ``build.sh`` script.
+If you want to use the simulation mode provided by LiteX, you will need to install OpenOCD. The version provided by Ubuntu is too old, so you will need to install it from source.
 
 .. code-block:: console
 
-    $ cd Damn-Vuln-IoT-SoC/litex/litex/soc/software/firmware
-    $ ./build.sh
-    $ litex_term <device> --kernel=firmware.bin
+      $ sudo apt-get install git help2man perl python3 make autoconf g++ flex bison ccache
+      $ sudo apt-get install libgoogle-perftools-dev numactl perl-doc
+      $ sudo apt-get install libfl2
+      $ sudo apt-get install libfl-dev
+      $ sudo apt-get install zlibc zlib1g zlib1g-dev
+      
+      $ git clone https://github.com/verilator/verilator
 
-.. note::
+      $ cd verilator    
+      $ autoconf
+      $ ./configure
+      $ make -j `nproc`
+      $ sudo make install
 
-    To load the firmware on the external SPI flash memory you have to use the ``firmware.fbi`` which is generated with the ``build.sh`` script.
+Test the Demo in simulation mode
+--------------------------------
 
-Build OpenOCD for RiscV
------------------------
-
-If you want to use the JTAG interface and the GDB debugger you will need to build OpenOCD for RiscV.
+Alternatively, you can try the simulation, which is a downgraded version of the challenges and won't allow you to do them all.
 
 .. code-block:: console
-    
-    $ git clone https://github.com/SpinalHDL/openocd_riscv.git
-    $ cd openocd_riscv/
-    $ ./bootstrap
-    $ ./configure --enable-ftdi --enable-dummy
-    $ make
-    $ make install
+
+   $ sudo apt install libevent-dev libjson-c-dev
+   $ git clone https://github.com/Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC-Demo.git
+   $ pip3 install Damn-Vuln-IoT-SoC-Demo/
+   $ cd Damn-Vuln-IoT-SoC-Demo/Damn-Vuln-IoT-SoC-Demo
+   $ chmod +x sim.py
+   $ ./sim.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --no-compile-gateware
+   $ cd firmware
+   $ ./firmware.py --build-path=../build/sim/ --mem=rom
+   $ cd ..
+   $ ./sim.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-rom-init=firmware/firmware.bin --bios-console=disable
