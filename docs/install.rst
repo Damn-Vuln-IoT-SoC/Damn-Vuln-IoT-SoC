@@ -46,8 +46,9 @@ Since we use the VexRiscV processor the standard LiteX configuration is sufficie
 
 .. code-block:: console
 
+    $ cd Damn-Vuln-IoT-SoC
     $ pip3 install -r requirements.txt 
-    $ cd Damn-Vuln-IoT-SoC/Damn-Vuln-IoT-SoC
+    $ cd Damn-Vuln-IoT-SoC
     $ chmod +x litex_setup.py
     $ ./litex_setup.py --init --install --config=standard --tag=2022.08
 
@@ -89,6 +90,7 @@ Then you can edit the ``config/config.ini`` file to fill in the vulnerabilities 
    $ chmod +x build.py
    $ ./build.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --no-compile-gateware --build
    $ cd firmware
+   $ chmod +x firmware.py
    $ ./firmware.py --build-path=../build/board/ --mem=rom
    $ cd ..
    $ ./build.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-rom-init=firmware/firmware.bin --bios-console=disable --build --load
@@ -137,6 +139,7 @@ Alternatively, you can try the simulation, which is a downgraded version of the 
    $ chmod +x sim.py
    $ ./sim.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-main-ram-size=0x5000 --no-compile-gateware
    $ cd firmware
+   $ chmod +x firmware.py
    $ ./firmware.py --build-path=../build/sim/ --mem=rom
    $ cd ..
    $ ./sim.py --cpu-type=vexriscv --cpu-variant=lite+vul --integrated-rom-init=firmware/firmware.bin --bios-console=disable
