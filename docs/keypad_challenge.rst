@@ -24,7 +24,7 @@ Setup of the challenge
 Migen code of the challenge
 ---------------------------
 
-The code of the challenge in LiteX is located in the file : ``Damn-Vuln-IoT-SoC/litex/litex/soc/cores/keypad/keypad.py``.
+The code of the challenge in LiteX is located in the file : ``ip/keypad/keypad.py``.
 
 The password is checked digit by digit, it is easy to identify the check process in the Verilog code and retrieve the password. The password is set using the configuration file.
 

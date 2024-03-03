@@ -3,7 +3,7 @@ Challenge 2 : Enable JTAG (Overlap version)
 
 .. note:: 
 
-    This challenge can be disable, to change the configuration edit the file ``config.ini`` and modify the field ``jtag_lock_overlap``. This challenge is part of the challenges that revolves around the JTAG, this implies that if other challenges are activated it will change the Migen code used as well as the Verilog code generated, however the principle of the challenge remains the same. For more details I invite you to look at the : ``Damn-Vuln-IoT-SoC/litex/litex/soc/cores/jtag_lock.py``.
+    This challenge can be disable, to change the configuration edit the file ``config.ini`` and modify the field ``jtag_lock_overlap``. This challenge is part of the challenges that revolves around the JTAG, this implies that if other challenges are activated it will change the Migen code used as well as the Verilog code generated, however the principle of the challenge remains the same. For more details I invite you to look at the : ``ip/jtag_lock.py``.
 
 .. warning::
 
